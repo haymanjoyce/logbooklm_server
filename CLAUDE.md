@@ -187,6 +187,7 @@ Recommended: snapshot before any major change.
 | 2026-02-25 | Post pcon_app deployment — full stack live |
 | 2026-02-25 | Post README refactor |
 | 2026-03-01 | Post repo rename (doc_app → pcon_app) and /var/pcon_app data migration |
+| 2026-03-01 | Post GitHub integration removal and CLAUDE.md cleanup |
 
 ---
 
