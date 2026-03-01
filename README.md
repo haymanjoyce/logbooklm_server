@@ -165,6 +165,7 @@ curl -X POST \
 |------|-------|
 | 2026-02-25 | Post pcon_app deployment — full stack live |
 | 2026-02-25 | Post README refactor — separation of concerns across all three repos |
+| 2026-03-01 | Post repo rename (doc_app → pcon_app) and /var/pcon_app data migration |
 
 ---
 
