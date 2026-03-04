@@ -41,7 +41,7 @@ This is **not** an application repo. Do not put application code here.
 /opt/doc_app/
   app/                     ← doc_app source code (git repo → haymanjoyce/doc_app)
 
-/var/pcon_app/
+/var/pcon/
   projects/
     pcon_doc/              ← user content (docs, evidence, index_store)
       docs/
@@ -237,7 +237,7 @@ sudo bash /home/richard/pcon_server/harden.sh
 ## What Claude Code Should Never Do
 
 - Modify application code in `/opt/doc_app/app/` — that belongs to the doc_app repo
-- Touch user data in `/var/pcon_app/` — that belongs to the application
+- Touch user data in `/var/pcon/` — that belongs to the application
 - Delete or modify SSH keys in `/home/richard/.ssh/`
 - Disable or weaken any security hardening (fail2ban, SSH config, ufw)
 - Commit `.env` files or any secrets
