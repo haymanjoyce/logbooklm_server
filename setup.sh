@@ -2,8 +2,8 @@
 # setup.sh — Full server provisioning script
 #
 # Provisions a fresh Ubuntu 24.04 LTS server with:
-#   - Node.js v22 (LTS), Python 3.12, Git, Poetry
-#   - Claude Code (global npm install)
+#   - Python 3.12, Git, Poetry
+#   - Claude Code (native installer — no Node.js required)
 #   - tmux with persistent "main" session and SSH auto-attach
 #   - Security hardening (run harden.sh separately as root)
 #
@@ -35,35 +35,20 @@ sudo apt-get install -y \
     unattended-upgrades apt-listchanges \
     fail2ban ufw tmux
 
-# ─── 2. Node.js v22 (LTS) via NodeSource ─────────────────────────────────────
-info "[2/6] Installing Node.js v22..."
-if ! node --version 2>/dev/null | grep -q "^v22"; then
-    # Supply chain: download first, verify checksum, then execute.
-    # Update EXPECTED_SHA256 when you intentionally upgrade the NodeSource script.
-    NODESOURCE_SCRIPT=$(mktemp)
-    NODESOURCE_EXPECTED_SHA256="575583bbac2fccc0b5edd0dbc03e222d9f9dc8d724da996d22754d6411104fd1"
-    curl -fsSL https://deb.nodesource.com/setup_22.x -o "$NODESOURCE_SCRIPT"
-    NODESOURCE_ACTUAL_SHA256=$(sha256sum "$NODESOURCE_SCRIPT" | awk '{print $1}')
-    if [ "$NODESOURCE_ACTUAL_SHA256" != "$NODESOURCE_EXPECTED_SHA256" ]; then
-        rm -f "$NODESOURCE_SCRIPT"
-        die "NodeSource setup script checksum mismatch! Got $NODESOURCE_ACTUAL_SHA256"
-    fi
-    sudo -E bash "$NODESOURCE_SCRIPT"
-    rm -f "$NODESOURCE_SCRIPT"
-    sudo apt-get install -y nodejs
-fi
-info "    Node.js: $(node --version)"
-info "    npm:     $(npm --version)"
-
-# ─── 3. Claude Code (global) ─────────────────────────────────────────────────
-info "[3/6] Installing Claude Code..."
+# ─── 2. Claude Code (native installer) ───────────────────────────────────────
+info "[2/5] Installing Claude Code..."
 if ! claude --version &>/dev/null; then
-    sudo npm install -g @anthropic-ai/claude-code
+    # Native installer — no Node.js or npm required.
+    # Supply chain: download to temp file, then execute (no checksum: rolling release).
+    CLAUDE_INSTALLER=$(mktemp)
+    curl -fsSL https://claude.ai/install.sh -o "$CLAUDE_INSTALLER"
+    bash "$CLAUDE_INSTALLER"
+    rm -f "$CLAUDE_INSTALLER"
 fi
 info "    Claude Code: $(claude --version)"
 
-# ─── 4. Poetry (Python dependency manager) ───────────────────────────────────
-info "[4/6] Installing Poetry..."
+# ─── 3. Poetry (Python dependency manager) ───────────────────────────────────
+info "[3/5] Installing Poetry..."
 if ! poetry --version &>/dev/null; then
     # Supply chain: download first, verify checksum, then execute.
     # Update EXPECTED_SHA256 when you intentionally upgrade Poetry.
@@ -87,11 +72,11 @@ if ! grep -q 'poetry' "$HOME/.bashrc"; then
 fi
 
 # ─── 5. Projects directory ────────────────────────────────────────────────────
-info "[5/6] Creating projects directory..."
+info "[4/5] Creating projects directory..."
 mkdir -p "$HOME/projects"
 
 # ─── 6. tmux configuration ────────────────────────────────────────────────────
-info "[6/6] Configuring tmux..."
+info "[5/5] Configuring tmux..."
 
 cat > "$HOME/.tmux.conf" <<'TMUXEOF'
 # Mouse support (scrolling, pane selection, resize)

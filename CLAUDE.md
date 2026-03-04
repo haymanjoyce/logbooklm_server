@@ -59,8 +59,6 @@ This is **not** an application repo. Do not put application code here.
 | Package | Version |
 |---------|---------|
 | Ubuntu | 24.04 LTS |
-| Node.js | v22.22.0 |
-| npm | 11.10.1 |
 | Python | 3.12.3 |
 | Git | 2.43.0 |
 | Claude Code | 2.1.66 |
@@ -70,7 +68,7 @@ This is **not** an application repo. Do not put application code here.
 ## Scripts
 
 ### setup.sh
-Full provisioning script. Run on a fresh Ubuntu 24.04 server as the target user. Installs Node.js, Python, Git, Claude Code. Downloads installers to a temp file, verifies SHA256 checksums before executing.
+Full provisioning script. Run on a fresh Ubuntu 24.04 server as the target user. Installs Python, Git, Claude Code (native installer — no Node.js required), and Poetry. Downloads installers to a temp file before executing.
 
 ```bash
 bash /home/richard/pcon_server/setup.sh
@@ -223,9 +221,7 @@ sudo bash /home/richard/pcon_server/harden.sh
 - Auto-reboot at 03:00 UTC if required
 
 ### Manual updates (run periodically)
-- Node.js: check current vs latest at nodejs.org, update via NodeSource if needed
-- npm: sudo npm install -g npm@latest
-- Claude Code: sudo npm install -g @anthropic-ai/claude-code
+- Claude Code: auto-updates in the background; or run `curl -fsSL https://claude.ai/install.sh | bash` to force update
 - Python: Ubuntu-managed, handled by unattended-upgrades
 - Git: Ubuntu-managed, handled by unattended-upgrades
 
