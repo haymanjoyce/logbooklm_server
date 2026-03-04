@@ -189,6 +189,7 @@ Recommended: snapshot before any major change.
 | 2026-03-01 | Post repo rename (doc_app → pcon_app) and /var/pcon_app data migration |
 | 2026-03-01 | Post GitHub integration removal and CLAUDE.md cleanup |
 | 2026-03-04 | Post app rename (pcon_app → doc_app) |
+| 2026-03-04 | Post data directory rename (/var/pcon_app → /var/pcon) |
 
 ---
 
